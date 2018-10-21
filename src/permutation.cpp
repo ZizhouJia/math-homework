@@ -162,9 +162,7 @@ long from_permutation_2(permutation_number& p_number){
   decrease_media_number m_number(m_vector,N);
   return m_number.to_number();
 }
-permutation_number::~permutation_number()
-{
-}
+
 
 //字典序法,根据十进制index序号产生排列pn,pn-1,..,p1
 permutation_number generate_permutation_dict(long index, int N){
