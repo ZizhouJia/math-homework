@@ -117,6 +117,3 @@ int increase_media_number::get_N(){
 	return this->N;
 }
 
-increase_media_number::~increase_media_number(){
-
-}
