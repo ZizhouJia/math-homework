@@ -40,7 +40,6 @@ class increase_media_number
     vector<int> get_vector();
     //获取全排列的位
     int get_N();
-    ~increase_media_number();
   private:
     int N;
     vector<int> numbers;
