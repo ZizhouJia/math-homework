@@ -162,3 +162,144 @@ long from_permutation_2(permutation_number& p_number){
   decrease_media_number m_number(m_vector,N);
   return m_number.to_number();
 }
+
+
+//字典序法,根据十进制index序号产生排列pn,pn-1,..,p1
+permutation_number generate_permutation_dict(long index, int N){
+	//先转化为递增进位制数
+	increase_media_number m_number(index,N);
+	//排列->中介数:p2,p3,p4,..,n->k1,k2,..,kn-1
+	vector<int> m_vector = m_number.get_vector();
+    //cout<<"media number:"<<m_number.to_string()<<endl;
+
+	//排列:从右到左,1,2,3,...,9
+	vector<int> p_vector(N, 0);
+	//标记
+	vector<int> flag_vector(N, 0);
+	for(int i=0;i<N;i++){
+        p_vector[i]=0;
+        flag_vector[i]=0;
+
+	}
+
+	for (int i = m_vector.size()-1; i >=0; i--){
+		int tmp = m_vector[i]+1;
+		int cnt=0;
+        for (int j = i+1; j <p_vector.size(); j++){
+            if (p_vector[j] <= tmp&&p_vector[j]!=0){
+                cnt++;
+            }
+        }
+        int lasttmp=tmp;
+        tmp = tmp + cnt;
+        while(cnt){
+            cnt=0;
+            for (int j = i+1; j <p_vector.size(); j++){
+                if (p_vector[j] <= tmp&&p_vector[j]>lasttmp){
+                    cnt++;
+                }
+            }
+            lasttmp=tmp;
+            tmp = tmp + cnt;
+        }
+		p_vector[i+1] = tmp;
+		flag_vector[tmp-1] = 1;
+	}
+
+	for (int i = 0; i <N; i++){
+		if (flag_vector[i] == 0){
+			p_vector[0] = i+1;
+			break;
+		}
+	}
+	permutation_number p_number(p_vector, N);
+	return p_number;
+}
+
+//字典序法,根据排列产生十进制序号
+long from_permutation_dict(permutation_number& p_number){
+	//共N个数
+	int N = p_number.get_N();
+	//排列,从右到左
+	vector<int> p_vector = p_number.get_vector();
+	//中介数，数量为N-1
+	vector<int> m_vector(N - 1, 0);
+	//根据排列推出中介数
+	for (int i = p_vector.size()-1; i>=1; i--){
+		int key = p_vector[i];
+		int cnt = 0;
+		for (int j = i - 1; j >= 0; j--){
+			if (p_vector[j] < key){
+				cnt++;
+			}
+		}
+		m_vector[i-1] = cnt;
+	}
+	increase_media_number m_number = increase_media_number(m_vector, N);
+	//cout<<"perm->media number:"<<m_number.to_string()<<endl;
+	return m_number.to_number();
+}
+
+
+//递增进位制法,根据十进制index序号产生排列
+permutation_number generate_permutation_increase(long index, int N){
+	//先转化为递增进位制数
+	increase_media_number m_number(index, N);
+	//中介数:a2,a3,...,a9
+	vector<int> m_vector = m_number.get_vector();
+	//cout<<"media number:"<<m_number.to_string()<<endl;
+	//排列:从右到左,1,2,3,...,9
+	vector<int> p_vector(N, 0);
+
+    for(int i=0;i<N;++i){
+        p_vector[i]=0;
+    }
+	for (int i = m_vector.size()-1; i >=0; i--){
+		int spacenum = 0;
+		int k = m_vector[i]+1;
+		int j = 0;
+		for (j = 0; j < N; j++){
+			if (p_vector[j] == 0){
+				spacenum++;
+			}
+            if (spacenum == k){
+				break;
+			}
+		}
+		p_vector[j] = i+2;
+	}
+	for (int i = 0; i < N; i++){
+		if (p_vector[i] == 0){
+			p_vector[i] = 1;
+		}
+	}
+	permutation_number p_number(p_vector, N);
+	return p_number;
+}
+
+//递增进位制法,根据排列产生十进制序号
+long from_permutation_increase(permutation_number& p_number){
+	//共N个数
+	int N = p_number.get_N();
+	//排列,从右到左
+	vector<int> p_vector = p_number.get_vector();
+	//中介数，数量为N-1
+	vector<int> m_vector(N-1, 0);
+	//根据排列推出中介数
+	for (int i = N-1; i >=0; i--){
+		if (p_vector[i] == 1){
+			continue;
+		}
+		int index = p_vector[i];
+		int value = 0;
+		for (int j = i - 1; j >= 0; j--){
+			if (p_vector[j] < index){
+				value++;
+			}
+		}
+		m_vector[index-2] = value;
+	}
+	increase_media_number m_number = increase_media_number(m_vector, N);
+	//cout<<"perm->media number:"<<m_number.to_string()<<endl;
+	return m_number.to_number();
+}

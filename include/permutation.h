@@ -22,3 +22,11 @@ long from_permutation_1(permutation_number& p_number);
 permutation_number generate_permutation_2(long index,int N);
 
 long from_permutation_2(permutation_number& p_number);
+
+permutation_number generate_permutation_dict(long index, int N);
+
+long from_permutation_dict(permutation_number& p_number);
+
+permutation_number generate_permutation_increase(long index, int N);
+
+long from_permutation_increase(permutation_number& p_number);
